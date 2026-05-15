@@ -1,148 +1,56 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-slate-950 text-slate-100">
-    <div class="relative overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.22),_transparent_34%),radial-gradient(circle_at_top_right,_rgba(244,114,182,0.18),_transparent_28%),linear-gradient(180deg,_rgba(2,6,23,0.98),_rgba(15,23,42,1))]"></div>
-        <div class="relative mx-auto max-w-7xl px-6 py-10 lg:px-8 lg:py-14">
-            <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                <div class="max-w-3xl">
-                    <p class="mb-4 inline-flex items-center rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">
-                        Dashboard
-                    </p>
-                    <h1 class="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                        Plan every trip from one calm control center.
-                    </h1>
-                    <p class="mt-4 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-                        Track destinations, confirm bookings, and keep your itinerary moving without jumping between tabs.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-end">
-                    <a href="#" class="inline-flex items-center justify-center rounded-full bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300">
-                        New trip
-                    </a>
-                    <a href="#" class="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
-                        View calendar
-                    </a>
-                </div>
+<div class="min-h-screen flex items-center justify-center font-['Sora',sans-serif] page-root">
+    <div class="bg-white/60 backdrop-blur-xl border border-white/60 rounded-[2rem] p-8 max-w-md w-full shadow-2xl shadow-[#7C3AED]/10 text-center animate-float-up">
+        <h1 class="text-3xl font-bold text-[#071022] mb-4 font-['Playfair_Display',serif]">Dashboard</h1>
+        <p class="text-slate-600 mb-6">Welcome, {{ Auth::user()->name ?? 'Traveler' }}!</p>
+        
+        @if(session('success'))
+            <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-medium rounded-xl px-4 py-3 mb-6 flex items-center gap-2">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                {{ session('success') }}
             </div>
+        @endif
 
-            <div class="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <div class="rounded-3xl border border-white/10 bg-white/6 p-5 shadow-2xl shadow-slate-950/20 backdrop-blur">
-                    <p class="text-sm text-slate-400">Upcoming trips</p>
-                    <div class="mt-3 flex items-end gap-2">
-                        <span class="text-4xl font-semibold text-white">12</span>
-                        <span class="pb-1 text-sm text-emerald-300">+3 this week</span>
-                    </div>
-                    <p class="mt-3 text-sm leading-6 text-slate-300">Trips are organized by departure date and destination.</p>
-                </div>
-
-                <div class="rounded-3xl border border-white/10 bg-white/6 p-5 shadow-2xl shadow-slate-950/20 backdrop-blur">
-                    <p class="text-sm text-slate-400">Bookings confirmed</p>
-                    <div class="mt-3 flex items-end gap-2">
-                        <span class="text-4xl font-semibold text-white">38</span>
-                        <span class="pb-1 text-sm text-cyan-300">94% settled</span>
-                    </div>
-                    <p class="mt-3 text-sm leading-6 text-slate-300">Flights, hotels, and ground transport are ready to review at a glance.</p>
-                </div>
-
-                <div class="rounded-3xl border border-white/10 bg-white/6 p-5 shadow-2xl shadow-slate-950/20 backdrop-blur">
-                    <p class="text-sm text-slate-400">Shared travelers</p>
-                    <div class="mt-3 flex items-end gap-2">
-                        <span class="text-4xl font-semibold text-white">7</span>
-                        <span class="pb-1 text-sm text-fuchsia-300">team active</span>
-                    </div>
-                    <p class="mt-3 text-sm leading-6 text-slate-300">Invite friends and keep everyone aligned on the same itinerary.</p>
-                </div>
-
-                <div class="rounded-3xl border border-white/10 bg-white/6 p-5 shadow-2xl shadow-slate-950/20 backdrop-blur">
-                    <p class="text-sm text-slate-400">Pending tasks</p>
-                    <div class="mt-3 flex items-end gap-2">
-                        <span class="text-4xl font-semibold text-white">5</span>
-                        <span class="pb-1 text-sm text-amber-300">needs attention</span>
-                    </div>
-                    <p class="mt-3 text-sm leading-6 text-slate-300">Visa checks, packing lists, and payment reminders are waiting.</p>
-                </div>
+        @if(session('info'))
+            <div class="bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium rounded-xl px-4 py-3 mb-6 flex items-center gap-2">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                {{ session('info') }}
             </div>
-
-            <div class="mt-10 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-                <section class="rounded-3xl border border-white/10 bg-slate-900/70 p-6 shadow-2xl shadow-slate-950/20 backdrop-blur">
-                    <div class="flex items-center justify-between gap-4">
-                        <div>
-                            <h2 class="text-xl font-semibold text-white">Next departures</h2>
-                            <p class="mt-1 text-sm text-slate-400">The next seven days are grouped by priority.</p>
-                        </div>
-                        <span class="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-200">
-                            On track
-                        </span>
-                    </div>
-
-                    <div class="mt-6 space-y-4">
-                        <article class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-400/30 hover:bg-white/8">
-                            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                <div>
-                                    <p class="text-sm font-semibold text-white">Tokyo weekend escape</p>
-                                    <p class="mt-1 text-sm text-slate-400">Flights, Shibuya hotel, and team dinner confirmed.</p>
-                                </div>
-                                <div class="text-sm text-cyan-200">Fri, 8:30 AM</div>
-                            </div>
-                        </article>
-
-                        <article class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-fuchsia-400/30 hover:bg-white/8">
-                            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                <div>
-                                    <p class="text-sm font-semibold text-white">Lisbon planning sprint</p>
-                                    <p class="mt-1 text-sm text-slate-400">Museum passes and seaside transfers still need review.</p>
-                                </div>
-                                <div class="text-sm text-fuchsia-200">Sat, 2:15 PM</div>
-                            </div>
-                        </article>
-
-                        <article class="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-amber-400/30 hover:bg-white/8">
-                            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                <div>
-                                    <p class="text-sm font-semibold text-white">Marrakesh arrival checklist</p>
-                                    <p class="mt-1 text-sm text-slate-400">Airport pickup, riad address, and currency prep.</p>
-                                </div>
-                                <div class="text-sm text-amber-200">Mon, 11:00 AM</div>
-                            </div>
-                        </article>
-                    </div>
-                </section>
-
-                <aside class="rounded-3xl border border-white/10 bg-slate-900/70 p-6 shadow-2xl shadow-slate-950/20 backdrop-blur">
-                    <h2 class="text-xl font-semibold text-white">Quick actions</h2>
-                    <p class="mt-1 text-sm text-slate-400">Shortcuts for the most common planning tasks.</p>
-
-                    <div class="mt-6 space-y-3">
-                        <a href="#" class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition hover:bg-white/10">
-                            <span class="text-sm font-medium text-white">Add destination</span>
-                            <span class="text-slate-400">+</span>
-                        </a>
-                        <a href="#" class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition hover:bg-white/10">
-                            <span class="text-sm font-medium text-white">Upload documents</span>
-                            <span class="text-slate-400">↗</span>
-                        </a>
-                        <a href="#" class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition hover:bg-white/10">
-                            <span class="text-sm font-medium text-white">Share itinerary</span>
-                            <span class="text-slate-400">⤴</span>
-                        </a>
-                        <a href="#" class="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition hover:bg-white/10">
-                            <span class="text-sm font-medium text-white">Build packing list</span>
-                            <span class="text-slate-400">≡</span>
-                        </a>
-                    </div>
-
-                    <div class="mt-6 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4">
-                        <p class="text-sm font-semibold text-cyan-100">Travel pulse</p>
-                        <p class="mt-2 text-sm leading-6 text-slate-300">
-                            Everything is synced. Your next scheduled trip is ready for final checks.
-                        </p>
-                    </div>
-                </aside>
-            </div>
+        @endif
+        {{-- Plan Badge --}}
+        <div class="mb-8">
+            @if(Auth::user()->plan === 'plus')
+                <div class="inline-flex items-center gap-2 bg-gradient-to-r from-[#FFF2E6] to-[#fae593]/30 border border-[#C9A84C]/30 rounded-full px-5 py-2.5">
+                    <svg class="w-4 h-4 text-[#C9A84C]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <span class="text-sm font-bold text-[#071022]">Explorer Plus</span>
+                </div>
+            @else
+                <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-5 py-2.5">
+                    <svg class="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    <span class="text-sm font-bold text-[#071022]">Free Plan</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-2">
+                    <a href="{{ route('checkout') }}" class="text-[#FF52A7] font-semibold hover:underline">Upgrade to Plus</a> for unlimited features.
+                </p>
+            @endif
         </div>
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="btn-outline w-full py-3 rounded-xl text-[#FF52A7] font-semibold text-sm hover:bg-[#FF52A7]/10 transition-colors">
+                Log Out
+            </button>
+        </form>
+
+        <form method="POST" action="{{ route('account.delete') }}" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="w-full py-2.5 mt-3 rounded-xl text-red-400 font-medium text-xs hover:text-red-600 hover:bg-red-50 transition-colors">
+                Delete Account
+            </button>
+        </form>
     </div>
 </div>
 @endsection
