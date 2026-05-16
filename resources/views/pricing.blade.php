@@ -43,23 +43,23 @@
         @if(Auth::check() && Auth::user()->plan === 'plus')
             <x-pricing-cards
                 freeLabel="Free Plan"
-                :freeUrl="route('trips.index')"
+                :freeUrl="route('home')"
                 plusLabel="Current Plan"
-                :plusUrl="route('trips.index')"
+                :plusUrl="route('home')"
                 plusCurrent
             />
         @elseif(Auth::check())
             @if(session('onboarding'))
                 <x-pricing-cards
                     freeLabel="Continue with Free"
-                    :freeUrl="route('trips.index')"
+                    :freeUrl="route('home')"
                     plusLabel="Upgrade to Plus"
                     :plusUrl="route('checkout')"
                 />
             @else
                 <x-pricing-cards
                     freeLabel="Current Plan"
-                    :freeUrl="route('trips.index')"
+                    :freeUrl="route('home')"
                     plusLabel="Upgrade to Plus"
                     :plusUrl="route('checkout')"
                     freeCurrent

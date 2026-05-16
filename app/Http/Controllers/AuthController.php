@@ -56,7 +56,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, true)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('trips.index'));
+            return redirect()->intended(route('home'));
         }
 
         return back()->withErrors([
@@ -69,16 +69,20 @@ class AuthController extends Controller
      */
     public function processCheckout(Request $request)
     {
+        $request->validate([
+            'payment_type' => ['required', 'in:direct,trial'],
+        ]);
+
         $user = Auth::user();
 
         if ($user->plan === 'plus') {
-            return redirect()->route('trips.index')->with('info', 'You are already on the Explorer Plus plan!');
+            return redirect()->route('home')->with('info', 'You are already on the Explorer Plus plan!');
         }
 
         $user->plan = 'plus';
         $user->save();
 
-        return redirect()->route('trips.index')->with('success', 'Welcome to Explorer Plus! Your upgrade is now active.');
+        return redirect()->route('home')->with('success', 'Welcome to Explorer Plus! Your upgrade is now active.');
     }
 
     /**
@@ -118,7 +122,7 @@ class AuthController extends Controller
         $plan = $request->input('plan');
 
         if ($plan === 'free') {
-            return redirect()->route('trips.index');
+            return redirect()->route('home');
         } elseif ($plan === 'plus') {
             return redirect()->route('checkout');
         }

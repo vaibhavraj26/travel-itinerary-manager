@@ -23,6 +23,11 @@ class User extends Authenticatable
         'email',
         'password',
         'plan',
+        'avatar',
+        'bio',
+        'location',
+        'phone',
+        'social_links',
     ];
 
     /**
@@ -45,6 +50,23 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'social_links' => 'array',
         ];
+    }
+
+    /**
+     * Get the trips for the user.
+     */
+    public function trips()
+    {
+        return $this->hasMany(Trip::class);
+    }
+
+    /**
+     * Get the trips shared with the user.
+     */
+    public function sharedTrips()
+    {
+        return $this->belongsToMany(Trip::class)->withPivot('role')->withTimestamps();
     }
 }

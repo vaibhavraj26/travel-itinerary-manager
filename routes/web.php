@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TripController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (Auth::check()) {
-        return redirect()->route('trips.index');
+        return redirect()->route('home');
     }
     return view('landing');
 })->name('landing');
@@ -32,17 +34,41 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::delete('/account', [AuthController::class, 'deleteAccount'])->name('account.delete');
 
-    Route::get('/trips', function () {
-        return view('dashboard');
-    })->name('trips.index');
+    Route::get('/home', function () {
+        return view('dashboard.index');
+    })->name('home');
     
+    // Profile Management
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
+    // Trips Management
+    Route::get('/trips', [TripController::class, 'index'])->name('trips.index');
+    Route::get('/trips/create', [TripController::class, 'create'])->name('trips.create');
+    Route::post('/trips', [TripController::class, 'store'])->name('trips.store');
+    Route::get('/trips/{trip}', [TripController::class, 'show'])->name('trips.show');
+    Route::get('/trips/{trip}/edit', [TripController::class, 'edit'])->name('trips.edit');
+    Route::put('/trips/{trip}', [TripController::class, 'update'])->name('trips.update');
+    Route::delete('/trips/{trip}', [TripController::class, 'destroy'])->name('trips.destroy');
+
+    // Trip Activities
+    Route::post('/trips/{trip}/activities', [TripController::class, 'storeActivity'])->name('trips.activities.store');
+    
+    // Trip Expenses
+    Route::post('/trips/{trip}/expenses', [TripController::class, 'storeExpense'])->name('trips.expenses.store');
+    
+    // Trip Members (Sharing)
+    Route::post('/trips/{trip}/members', [TripController::class, 'addMember'])->name('trips.members.store');
+    Route::delete('/trips/{trip}/members/{user}', [TripController::class, 'removeMember'])->name('trips.members.destroy');
+
     Route::get('/destinations', function () {
-        return view('dashboard');
+        return view('dashboard.index');
     })->name('destinations.index');
 
     Route::get('/checkout', function () {
         if (Auth::user()->plan === 'plus') {
-            return redirect()->route('trips.index')->with('info', 'You are already on the Explorer Plus plan!');
+            return redirect()->route('home')->with('info', 'You are already on the Explorer Plus plan!');
         }
         return view('checkout');
     })->name('checkout');

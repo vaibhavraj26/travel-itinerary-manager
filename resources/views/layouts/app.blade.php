@@ -6,6 +6,9 @@
     <title>{{ config('app.name', 'TripTogether') }} - Travel Itinerary Manager</title>
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
     
 </head>
 <body>
@@ -14,5 +17,7 @@
     @if(!request()->routeIs('login') && !request()->routeIs('register'))
         <x-footer /> 
     @endif
+
+    <x-toaster />
 </body>
 </html> 
