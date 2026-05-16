@@ -29,7 +29,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'plan' => in_array($plan, ['free', 'plus']) ? $plan : 'free',
+            'plan' => 'free',
         ]);
 
         // Login the user after registration and remember them for 30 days
@@ -58,7 +58,7 @@ class AuthController extends Controller
 
             return redirect()->intended(route('home'));
         }
-
+ 
         return back()->withErrors([
             'login' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
@@ -77,6 +77,23 @@ class AuthController extends Controller
 
         if ($user->plan === 'plus') {
             return redirect()->route('home')->with('info', 'You are already on the Explorer Plus plan!');
+        }
+
+        $validated = $request->validate([
+            'payment_type' => ['required', 'string', 'in:card,trial'],
+        ]);
+
+        $paymentType = $validated['payment_type'];
+        $paymentVerified = $request->session()->boolean('checkout.payment_verified');
+        $trialCreated = $request->session()->boolean('checkout.trial_created');
+
+        if (
+            ($paymentType === 'card' && !$paymentVerified) ||
+            ($paymentType === 'trial' && !$trialCreated)
+        ) {
+            return redirect()->route('trips.index')->withErrors([
+                'checkout' => 'We could not verify your checkout. Please complete payment or trial activation before upgrading.',
+            ]);
         }
 
         $user->plan = 'plus';
