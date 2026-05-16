@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap');
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -8,4 +9,232 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+:root {
+    --gold: #FFB800;
+    --navy: #FFFFFF;
+    --accent: #7C3AED;
+    --party-1: #FF52A7;
+    --party-2: #FFD166;
+    --page-text: #071022;
+}
+
+@keyframes float-up {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+@keyframes slide-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(60px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes glow-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(201, 168, 76, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(201, 168, 76, 0.7);
+    }
+}
+
+.animate-float-up {
+    animation: float-up 0.8s ease forwards;
+}
+
+.animate-slide-right {
+    animation: slide-in-right 0.8s ease forwards;
+}
+
+.delay-100 {
+    animation-delay: 0.1s;
+}
+
+.delay-200 {
+    animation-delay: 0.2s;
+}
+
+.delay-300 {
+    animation-delay: 0.3s;
+}
+
+.delay-400 {
+    animation-delay: 0.4s;
+}
+
+.gold-shimmer {
+    background: linear-gradient(90deg, var(--party-1) 0%, var(--party-2) 50%, var(--accent) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+}
+
+.gradient-bg {
+    background: transparent;
+}
+
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(201, 168, 76, 0.15);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--party-1), var(--party-2), var(--accent));
+    background-size: 200% auto;
+    transition: background-position 0.4s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 36px rgba(124, 58, 237, 0.18);
+}
+
+.btn-outline {
+    border: 1.5px solid rgba(255, 82, 167, 0.35);
+    transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+    border-color: var(--party-1);
+    background: rgba(255, 82, 167, 0.06);
+    transform: translateY(-2px);
+}
+
+.btn-outline.no-lift:hover {
+    transform: none;
+}
+
+html {
+    background-color: #fdfaff;
+    background-image: radial-gradient(rgba(139, 92, 246, 0.18) 0.9px, transparent 0.9px);
+    background-size: 5px 5px;
+}
+
+body {
+    background-color: transparent;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 800px;
+    height: 800px;
+    background: linear-gradient(to bottom right, rgba(225, 207, 255, 0.1), rgba(253, 147, 198, 0.1));
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 600px;
+    height: 600px;
+    background: linear-gradient(to top right, rgba(252, 217, 136, 0.1), rgba(255, 109, 182, 0.1));
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Ensure page content sits above the global grain background */
+.page-root {
+    position: relative;
+    z-index: 1;
+}
+
+#travel-landing.page-root .text-white {
+    color: var(--page-text) !important;
+}
+
+#travel-landing.page-root .text-slate-700 {
+    color: rgba(7, 16, 34, 0.92) !important;
+}
+
+#travel-landing.page-root .text-slate-600 {
+    color: rgba(7, 16, 34, 0.86) !important;
+}
+
+#travel-landing.page-root .text-slate-500 {
+    color: rgba(7, 16, 34, 0.74) !important;
+}
+
+#travel-landing.page-root .text-slate-400 {
+    color: rgba(7, 16, 34, 0.65) !important;
+}
+
+#travel-landing.page-root .text-slate-300 {
+    color: rgba(7, 16, 34, 0.58) !important;
+}
+
+#travel-landing.page-root .text-gray-500 {
+    color: rgba(7, 16, 34, 0.74) !important;
+}
+
+#travel-landing.page-root .text-gray-400 {
+    color: rgba(7, 16, 34, 0.65) !important;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--navy);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gold);
+    border-radius: 3px;
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
