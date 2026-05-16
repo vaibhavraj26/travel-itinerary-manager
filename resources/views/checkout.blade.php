@@ -82,7 +82,7 @@
                         <div id="card-fields">
                             <div class="mb-5">
                                 <label for="cardholder_name" class="block text-xs font-semibold text-slate-700 mb-1">Cardholder Name</label>
-                                <input type="text" id="cardholder_name" class="checkout-input w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#FF52A7]/30 focus:border-[#FF52A7] outline-none text-slate-800 placeholder-slate-400" placeholder="John Doe">
+                                <input type="text" id="cardholder_name" name="cardholder_name" class="checkout-input w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#FF52A7]/30 focus:border-[#FF52A7] outline-none text-slate-800 placeholder-slate-400" placeholder="John Doe">
                                 <p class="text-red-500 text-xs mt-1 hidden" id="err-name">Please enter the cardholder name.</p>
                             </div>
 
@@ -92,7 +92,7 @@
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                         <svg class="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                                     </div>
-                                    <input type="text" id="card_number" maxlength="19" class="checkout-input w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#FF52A7]/30 focus:border-[#FF52A7] outline-none text-slate-800 placeholder-slate-400 font-mono tracking-widest" placeholder="0000 0000 0000 0000">
+                                    <input type="text" id="card_number" name="card_number" maxlength="19" class="checkout-input w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#FF52A7]/30 focus:border-[#FF52A7] outline-none text-slate-800 placeholder-slate-400 font-mono tracking-widest" placeholder="0000 0000 0000 0000">
                                 </div>
                                 <p class="text-red-500 text-xs mt-1 hidden" id="err-card">Please enter a valid 16-digit card number.</p>
                             </div>
@@ -100,12 +100,12 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label for="expiry_date" class="block text-xs font-semibold text-slate-700 mb-1">Expiry Date</label>
-                                    <input type="text" id="expiry_date" maxlength="5" class="checkout-input w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#FF52A7]/30 focus:border-[#FF52A7] outline-none text-slate-800 placeholder-slate-400 text-center" placeholder="MM/YY">
+                                    <input type="text" id="expiry_date" name="expiry_date" maxlength="5" class="checkout-input w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#FF52A7]/30 focus:border-[#FF52A7] outline-none text-slate-800 placeholder-slate-400 text-center" placeholder="MM/YY">
                                     <p class="text-red-500 text-xs mt-1 hidden" id="err-expiry">Enter a valid expiry (MM/YY).</p>
                                 </div>
                                 <div>
                                     <label for="cvc" class="block text-xs font-semibold text-slate-700 mb-1">CVC</label>
-                                    <input type="text" id="cvc" maxlength="4" class="checkout-input w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#FF52A7]/30 focus:border-[#FF52A7] outline-none text-slate-800 placeholder-slate-400 text-center" placeholder="123">
+                                    <input type="text" id="cvc" name="cvc" maxlength="4" class="checkout-input w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#FF52A7]/30 focus:border-[#FF52A7] outline-none text-slate-800 placeholder-slate-400 text-center" placeholder="123">
                                     <p class="text-red-500 text-xs mt-1 hidden" id="err-cvc">Enter a valid 3 or 4-digit CVC.</p>
                                 </div>
                             </div>
