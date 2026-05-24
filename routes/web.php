@@ -3,6 +3,9 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Expense;
+use App\Models\ItineraryActivity;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -37,8 +40,111 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::delete('/account', [AuthController::class, 'deleteAccount'])->name('account.delete');
 
-    Route::get('/home', function () {
-        return view('dashboard.index');
+    $dashboardData = function () {
+        $user = Auth::user();
+        $today = Carbon::today();
+
+        $trips = $user->trips()->latest()->get();
+
+        $classifyTrip = function ($trip) use ($today) {
+            if ($trip->status === 'cancelled') {
+                return 'cancelled';
+            }
+
+            $start = Carbon::parse($trip->start_date)->startOfDay();
+            $end = Carbon::parse($trip->end_date)->endOfDay();
+
+            if ($today->lt($start)) {
+                return 'upcoming';
+            }
+
+            if ($today->between($start, $end)) {
+                return 'active';
+            }
+
+            return 'completed';
+        };
+
+        $tripSummaries = $trips->map(function ($trip) use ($classifyTrip) {
+            $trip->computed_status = $classifyTrip($trip);
+            return $trip;
+        });
+
+        $upcomingTripsCount = $tripSummaries->where('computed_status', 'upcoming')->count();
+        $activeItinerariesCount = $tripSummaries->where('computed_status', 'active')->count();
+        $totalBudget = (float) $tripSummaries->sum(fn ($trip) => $trip->budget ?? 0);
+        $nextTrip = $tripSummaries
+            ->where('computed_status', 'upcoming')
+            ->sortBy('start_date')
+            ->first();
+
+        $tripIds = $trips->pluck('id');
+
+        $tripCreatedEvents = $trips->sortByDesc('created_at')->take(3)->map(function ($trip) {
+            return [
+                'kind' => 'trip',
+                'title' => $trip->title,
+                'description' => 'Trip planned for ' . $trip->destination,
+                'time_label' => $trip->created_at?->diffForHumans() ?? 'Just now',
+                'occurred_at' => $trip->created_at,
+            ];
+        });
+
+        $activityEvents = $tripIds->isEmpty()
+            ? collect()
+            : ItineraryActivity::query()
+                ->whereIn('trip_id', $tripIds)
+                ->with('trip')
+                ->latest('created_at')
+                ->take(4)
+                ->get()
+                ->map(function ($activity) {
+                    return [
+                        'kind' => 'activity',
+                        'title' => $activity->title,
+                        'description' => 'Added to ' . ($activity->trip?->title ?? 'your trip'),
+                        'time_label' => $activity->created_at?->diffForHumans() ?? 'Just now',
+                        'occurred_at' => $activity->created_at,
+                    ];
+                });
+
+        $expenseEvents = $tripIds->isEmpty()
+            ? collect()
+            : Expense::query()
+                ->whereIn('trip_id', $tripIds)
+                ->with('trip')
+                ->latest('created_at')
+                ->take(4)
+                ->get()
+                ->map(function ($expense) {
+                    return [
+                        'kind' => $expense->type === 'budget' ? 'budget' : 'expense',
+                        'title' => $expense->title,
+                        'description' => strtoupper($expense->type) . ' recorded for ' . ($expense->trip?->title ?? 'your trip'),
+                        'time_label' => $expense->created_at?->diffForHumans() ?? 'Just now',
+                        'occurred_at' => $expense->created_at,
+                    ];
+                });
+
+        $recentEvents = $tripCreatedEvents
+            ->merge($activityEvents)
+            ->merge($expenseEvents)
+            ->sortByDesc('occurred_at')
+            ->take(4)
+            ->values();
+
+        return compact(
+            'tripSummaries',
+            'upcomingTripsCount',
+            'activeItinerariesCount',
+            'totalBudget',
+            'nextTrip',
+            'recentEvents'
+        );
+    };
+
+    Route::get('/home', function () use ($dashboardData) {
+        return view('dashboard.index', $dashboardData());
     })->name('home');
 
     Route::get('/ai-planner', function () {
@@ -84,8 +190,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/trips/{trip}/members/decline', [TripController::class, 'declineInvitation'])->name('trips.members.decline');
     Route::delete('/trips/{trip}/invitations/{invitation}', [TripController::class, 'cancelInvitation'])->name('trips.invitations.destroy');
 
-    Route::get('/destinations', function () {
-        return view('dashboard.index');
+    Route::get('/destinations', function () use ($dashboardData) {
+        return view('dashboard.index', $dashboardData());
     })->name('destinations.index');
 
     Route::get('/checkout', function () {
