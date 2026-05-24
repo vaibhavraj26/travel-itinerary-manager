@@ -16,6 +16,7 @@ class ItineraryActivity extends Model
         'notes',
         'type',
         'sort_order',
+        'is_completed',
     ];
 
     /**
@@ -25,4 +26,8 @@ class ItineraryActivity extends Model
     {
         return $this->belongsTo(Trip::class);
     }
+
+    protected $casts = [
+        'is_completed' => 'boolean',
+    ];
 }

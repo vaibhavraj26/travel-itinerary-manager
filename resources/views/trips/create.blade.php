@@ -44,12 +44,15 @@
                 {{-- Status --}}
                 <div class="space-y-2">
                     <label for="status" class="text-sm font-bold text-slate-700">Trip Status</label>
-                    <select name="status" id="status" class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#FF52A7] transition-all outline-none appearance-none">
-                        <option value="upcoming" {{ old('status') == 'upcoming' ? 'selected' : '' }}>Upcoming</option>
-                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Currently Active</option>
-                        <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
-                        <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                    </select>
+                    <div class="relative">
+                        <select name="status" id="status" class="w-full px-5 pr-12 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[#FF52A7] transition-all outline-none appearance-none">
+                            <option value="upcoming" {{ old('status') == 'upcoming' ? 'selected' : '' }}>Upcoming</option>
+                            <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Currently Active</option>
+                            <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                            <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        </select>
+                        <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
                 </div>
 
                 {{-- Dates --}}

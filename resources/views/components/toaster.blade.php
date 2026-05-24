@@ -1,17 +1,34 @@
 <div
-    x-data="toastManager()"
+    x-data="{
+        toasts: [],
+        addToast(message, type = 'success') {
+            const id = Date.now();
+            this.toasts.push({ id, message, type, visible: true });
+            
+            setTimeout(() => {
+                this.removeToast(id);
+            }, 7000);
+        },
+        removeToast(id) {
+            const toast = this.toasts.find(t => t.id === id);
+            if (toast) toast.visible = false;
+            setTimeout(() => {
+                this.toasts = this.toasts.filter(t => t.id !== id);
+            }, 300); // Wait for transition
+        }
+    }"
     @notify.window="addToast($event.detail.message, $event.detail.type || 'success')"
-    class="fixed bottom-0 right-0 z-[999] p-4 space-y-3 w-full max-w-sm pointer-events-none flex flex-col items-end"
+    class="fixed top-0 right-0 z-[999] p-4 space-y-3 w-full max-w-sm pointer-events-none flex flex-col items-end"
 >
     <template x-for="toast in toasts" :key="toast.id">
         <div
             x-show="toast.visible"
             x-transition:enter="transition ease-out duration-300 transform"
-            x-transition:enter-start="opacity-0 translate-y-8 scale-95"
+            x-transition:enter-start="opacity-0 -translate-y-8 scale-95"
             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
             x-transition:leave="transition ease-in duration-200 transform"
             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-            x-transition:leave-end="opacity-0 translate-y-8 scale-95"
+            x-transition:leave-end="opacity-0 -translate-y-8 scale-95"
             class="flex items-center w-full max-w-sm p-4 text-slate-600 bg-white rounded-xl shadow-xl border border-slate-100 dark:text-slate-300 dark:bg-slate-800 dark:border-slate-700 pointer-events-auto"
             role="alert"
         >
@@ -39,38 +56,15 @@
             </button>
         </div>
     </template>
-
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('toastManager', () => ({
-                toasts: [],
-                addToast(message, type = 'success') {
-                    const id = Date.now();
-                    this.toasts.push({ id, message, type, visible: true });
-                    
-                    setTimeout(() => {
-                        this.removeToast(id);
-                    }, 4000);
-                },
-                removeToast(id) {
-                    const toast = this.toasts.find(t => t.id === id);
-                    if (toast) toast.visible = false;
-                    setTimeout(() => {
-                        this.toasts = this.toasts.filter(t => t.id !== id);
-                    }, 300); // Wait for transition
-                }
-            }));
-        });
-    </script>
     
     <!-- Initial Server-side toasts -->
     @if(session('success'))
-        <div x-init="$nextTick(() => addToast({!! json_encode(session('success')) !!}, 'success'))"></div>
+        <div x-init="addToast($el.innerText, 'success')" class="hidden">{{ session('success') }}</div>
     @endif
     @if(session('error'))
-        <div x-init="$nextTick(() => addToast({!! json_encode(session('error')) !!}, 'error'))"></div>
+        <div x-init="addToast($el.innerText, 'error')" class="hidden">{{ session('error') }}</div>
     @endif
     @if(session('info'))
-        <div x-init="$nextTick(() => addToast({!! json_encode(session('info')) !!}, 'info'))"></div>
+        <div x-init="addToast($el.innerText, 'info')" class="hidden">{{ session('info') }}</div>
     @endif
 </div>

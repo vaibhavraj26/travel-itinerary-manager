@@ -113,7 +113,7 @@
                     </div>
 
                     <div class="flex items-center gap-4 pt-2">
-                        <button type="submit" class="py-3 px-8 bg-[#071022] text-white font-black rounded-xl shadow-lg hover:bg-slate-800 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                        <button type="submit" class="py-3 px-8 bg-[#071022] text-white font-black font-bold rounded-xl shadow-lg hover:bg-slate-800 hover:scale-[1.02] active:scale-[0.98] transition-all">
                             SAVE CHANGES
                         </button>
                         

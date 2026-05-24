@@ -91,8 +91,8 @@ class AuthController extends Controller
         }
 
         $paymentType = $validated['payment_type'];
-        $paymentVerified = $request->session()->boolean('checkout.payment_verified');
-        $trialCreated = $request->session()->boolean('checkout.trial_created');
+        $paymentVerified = $request->session()->get('checkout.payment_verified', false);
+        $trialCreated = $request->session()->get('checkout.trial_created', false);
 
         if (
             ($paymentType === 'card' && !$paymentVerified) ||

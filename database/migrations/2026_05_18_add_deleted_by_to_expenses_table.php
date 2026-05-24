@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('expenses', function (Blueprint $table) {
-            $table->foreignId('edited_by')->nullable()->constrained('users')->nullOnDelete();
+            if (!Schema::hasColumn('expenses', 'deleted_by')) {
+                $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
+            }
         });
     }
 
@@ -22,8 +24,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('expenses', function (Blueprint $table) {
-            $table->dropForeign(['edited_by']);
-            $table->dropColumn('edited_by');
+            if (Schema::hasColumn('expenses', 'deleted_by')) {
+                $table->dropForeignKey(['deleted_by']);
+                $table->dropColumn('deleted_by');
+            }
         });
     }
 };

@@ -13,6 +13,7 @@ class Trip extends Model
         'start_date',
         'end_date',
         'description',
+        'quick_notes',
         'status',
         'image_url',
         'budget',
@@ -45,5 +46,13 @@ class Trip extends Model
     public function expenses()
     {
         return $this->hasMany(Expense::class);
+    }
+
+    /**
+     * Get the invitations for unregistered users.
+     */
+    public function invitations()
+    {
+        return $this->hasMany(TripInvitation::class);
     }
 }
