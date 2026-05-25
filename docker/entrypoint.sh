@@ -9,6 +9,14 @@ sed "s/{{PORT}}/$PORT/g" /etc/nginx/conf.d/default.conf.template > /etc/nginx/co
 mkdir -p storage bootstrap/cache
 chown -R www-data:www-data storage bootstrap/cache /var/www/html/public
 
+# Ensure sqlite database file exists when using sqlite
+if [ "${DB_CONNECTION}" = "sqlite" ] && [ -n "${DB_DATABASE}" ]; then
+  DB_PATH="${DB_DATABASE}"
+  mkdir -p "$(dirname "$DB_PATH")"
+  touch "$DB_PATH"
+  chown -R www-data:www-data "$(dirname "$DB_PATH")"
+fi
+
 # Generate APP_KEY if missing
 if [ -z "${APP_KEY}" ] || [ "${APP_KEY}" = "" ]; then
   php artisan key:generate --force
