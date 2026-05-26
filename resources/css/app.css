@@ -9,15 +9,24 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-gold: var(--gold);
+    --color-white: var(--white);
+    --color-accent: var(--accent);
+    --color-party-1: var(--party-1);
+    --color-party-2: var(--party-2);
+    --color-page-text: var(--page-text);
+    --color-gold-base: var(--gold-base);
 }
 
 :root {
-    --gold: #FFB800;
-    --navy: #FFFFFF;
-    --accent: #7C3AED;
+    --gold: #C9A84C;
+    /* --gold: #FFB800; */
+    --white: #FFFFFF;
+    --accent: #7C3AED; 
     --party-1: #FF52A7;
     --party-2: #FFD166;
     --page-text: #071022;
+    --gold-base: #FFF7F0;
 }
 
 @keyframes float-up {
@@ -97,10 +106,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: shimmer 3s linear infinite;
-}
-
-.gradient-bg {
-    background: transparent;
 }
 
 .feature-card {
@@ -220,11 +225,11 @@ body::after {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--navy);
+    background: var(--white);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--gold);
+    background: var(--party-1);
     border-radius: 3px;
 }
 
