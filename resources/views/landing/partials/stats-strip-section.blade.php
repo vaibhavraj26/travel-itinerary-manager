@@ -1,4 +1,4 @@
-<section class="bg-[#FFF8F3] border-y border-[#FF52A7]/10 py-10" id="stats">
+<section class="bg-[#FFF8F3] border-y border-party-1/10 py-10" id="stats">
   
     <div class="max-w-6xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
       @foreach([
