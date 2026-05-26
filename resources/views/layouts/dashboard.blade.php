@@ -26,7 +26,6 @@
         @media (min-width: 1024px) {
             .sidebar-open aside { width: 16rem !important; }
             .sidebar-closed aside { width: 5rem !important; }
-            
             /* Hide text labels when closed to prevent pop-in */
             .sidebar-closed aside span, 
             .sidebar-closed aside p, 
@@ -51,13 +50,13 @@
     <div class="flex min-h-screen">
 
         <!-- Sidebar -->
-        @include('partials.sidebar')
+        <x-dashboard-sidebar />
 
         <!-- Main Content wrapper -->
         <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
         
         <!-- Top Navbar -->
-        @include('partials.topbar')
+        <x-dashboard-topbar />
 
         <!-- Main Dashboard Content -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[#F8F9FB] p-4 sm:p-6 lg:p-8">
