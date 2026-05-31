@@ -7,7 +7,7 @@
     
     {{-- Header Banner --}}
     <div class="relative h-48 rounded-[2rem] overflow-hidden shadow-lg group">
-        <div class="absolute inset-0 bg-gradient-to-r from-violet-600 to-[#FF52A7] group-hover:scale-105 transition-transform duration-700"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-violet-600 to-party-1 group-hover:scale-105 transition-transform duration-700"></div>
         <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         
         <div class="absolute -bottom-10 left-8 flex items-end gap-6">
@@ -16,7 +16,7 @@
                     @if($user->avatar)
                         <img src="{{ asset('storage/' . $user->avatar) }}" class="w-full h-full object-cover rounded-2xl" alt="{{ $user->name }}">
                     @else
-                        <div class="w-full h-full rounded-2xl bg-gradient-to-tr from-[#FF52A7] to-violet-500 flex items-center justify-center text-4xl text-white font-black">
+                        <div class="w-full h-full rounded-2xl bg-gradient-to-tr from-party-1 to-violet-500 flex items-center justify-center text-4xl text-white font-black">
                             {{ substr($user->name, 0, 1) }}
                         </div>
                     @endif
@@ -39,11 +39,11 @@
         {{-- Profile Information --}}
         <div class="lg:col-span-2 space-y-8">
             <div class="bg-white rounded-[2rem] p-8 border border-slate-200 shadow-sm relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-8 opacity-5 text-[#FF52A7] pointer-events-none">
+                <div class="absolute top-0 right-0 p-8 opacity-5 text-party-1 pointer-events-none">
                     <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 </div>
                 
-                <h2 class="text-xl font-bold text-[#071022] mb-1">Personal Information</h2>
+                <h2 class="text-xl font-bold text-page-text mb-1">Personal Information</h2>
                 <p class="text-slate-500 text-sm mb-6">Update your account's profile information and email address.</p>
 
                 <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-6 relative z-10">
@@ -52,52 +52,52 @@
 
                     <div class="space-y-2">
                         <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Profile Picture</label>
-                        <input type="file" name="avatar" accept="image/*" class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 @error('avatar') border-red-300 bg-red-50 @enderror">
+                        <input type="file" name="avatar" accept="image/*" class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 @error('avatar') border-red-300 bg-red-50 @enderror">
                         @error('avatar') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Full Name</label>
-                            <input type="text" name="name" value="{{ old('name', $user->name) }}" required class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all @error('name') border-red-300 bg-red-50 @enderror">
+                            <input type="text" name="name" value="{{ old('name', $user->name) }}" required class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all @error('name') border-red-300 bg-red-50 @enderror">
                             @error('name') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Email Address</label>
-                            <input type="email" name="email" value="{{ old('email', $user->email) }}" required class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all @error('email') border-red-300 bg-red-50 @enderror">
+                            <input type="email" name="email" value="{{ old('email', $user->email) }}" required class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all @error('email') border-red-300 bg-red-50 @enderror">
                             @error('email') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
                     <div class="space-y-2">
                         <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Bio / About Me</label>
-                        <textarea name="bio" rows="3" class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all @error('bio') border-red-300 bg-red-50 @enderror">{{ old('bio', $user->bio) }}</textarea>
+                        <textarea name="bio" rows="3" class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all @error('bio') border-red-300 bg-red-50 @enderror">{{ old('bio', $user->bio) }}</textarea>
                         @error('bio') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Location</label>
-                            <input type="text" name="location" value="{{ old('location', $user->location) }}" placeholder="e.g. New York, USA" class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all @error('location') border-red-300 bg-red-50 @enderror">
+                            <input type="text" name="location" value="{{ old('location', $user->location) }}" placeholder="e.g. New York, USA" class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all @error('location') border-red-300 bg-red-50 @enderror">
                             @error('location') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Phone Number</label>
-                            <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all @error('phone') border-red-300 bg-red-50 @enderror">
+                            <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full px-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all @error('phone') border-red-300 bg-red-50 @enderror">
                             @error('phone') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
-                    <h3 class="text-lg font-bold text-[#071022] mt-8 mb-4">Social Links</h3>
+                    <h3 class="text-lg font-bold text-page-text mt-8 mb-4">Social Links</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Instagram Username</label>
                             <div class="relative">
                                 <span class="absolute left-4 top-3.5 text-slate-400">@</span>
-                                <input type="text" name="instagram" value="{{ old('instagram', $user->social_links['instagram'] ?? '') }}" class="w-full pl-10 pr-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all @error('instagram') border-red-300 bg-red-50 @enderror">
+                                <input type="text" name="instagram" value="{{ old('instagram', $user->social_links['instagram'] ?? '') }}" class="w-full pl-10 pr-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all @error('instagram') border-red-300 bg-red-50 @enderror">
                             </div>
                             @error('instagram') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -106,14 +106,14 @@
                             <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Twitter / X Username</label>
                             <div class="relative">
                                 <span class="absolute left-4 top-3.5 text-slate-400">@</span>
-                                <input type="text" name="twitter" value="{{ old('twitter', $user->social_links['twitter'] ?? '') }}" class="w-full pl-10 pr-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all @error('twitter') border-red-300 bg-red-50 @enderror">
+                                <input type="text" name="twitter" value="{{ old('twitter', $user->social_links['twitter'] ?? '') }}" class="w-full pl-10 pr-5 py-3.5 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all @error('twitter') border-red-300 bg-red-50 @enderror">
                             </div>
                             @error('twitter') <p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
                     <div class="flex items-center gap-4 pt-2">
-                        <button type="submit" class="py-3 px-8 bg-[#071022] text-white font-black font-bold rounded-xl shadow-lg hover:bg-slate-800 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                        <button type="submit" class="py-3 px-8 bg-page-text text-white font-black font-bold rounded-xl shadow-lg hover:bg-slate-800 hover:scale-[1.02] active:scale-[0.98] transition-all">
                             SAVE CHANGES
                         </button>
                         
@@ -133,7 +133,7 @@
                     <svg class="w-24 h-24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 </div>
 
-                <h2 class="text-xl font-bold text-[#071022] mb-1">Update Password</h2>
+                <h2 class="text-xl font-bold text-page-text mb-1">Update Password</h2>
                 <p class="text-slate-500 text-sm mb-6">Ensure your account is using a long, random password to stay secure.</p>
 
                 <form method="POST" action="{{ route('profile.password') }}" class="space-y-6 relative z-10">
@@ -160,7 +160,7 @@
                     </div>
 
                     <div class="flex items-center gap-4 pt-2">
-                        <button type="submit" class="py-3 px-8 bg-[#071022] text-white font-black rounded-xl shadow-lg hover:bg-slate-800 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                        <button type="submit" class="py-3 px-8 bg-page-text text-white font-black rounded-xl shadow-lg hover:bg-slate-800 hover:scale-[1.02] active:scale-[0.98] transition-all">
                             UPDATE PASSWORD
                         </button>
                     </div>
@@ -171,7 +171,7 @@
         {{-- Side Column --}}
         <div class="space-y-8">
             {{-- Account Plan Status --}}
-            <div class="bg-gradient-to-br from-[#071022] to-slate-800 rounded-[2rem] p-8 shadow-xl text-white relative overflow-hidden">
+            <div class="bg-gradient-to-br from-page-text to-slate-800 rounded-[2rem] p-8 shadow-xl text-white relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
                 
                 <h2 class="text-lg font-bold mb-4">Account Status</h2>
@@ -187,7 +187,7 @@
                         Free Tier
                     </div>
                     <p class="text-white/70 text-sm leading-relaxed mb-6">Upgrade to Explorer Plus to unlock unlimited itineraries, collaboration, and advanced trip building features.</p>
-                    <a href="{{ route('pricing') }}" class="block text-center w-full py-3 bg-gradient-to-r from-[#FF52A7] to-violet-500 text-white font-black rounded-xl shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    <a href="{{ route('pricing') }}" class="block text-center w-full py-3 bg-gradient-to-r from-party-1 to-violet-500 text-white font-black rounded-xl shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all">
                         UPGRADE NOW
                     </a>
                 @endif
@@ -212,7 +212,7 @@
                             <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                         </div>
                         
-                        <h3 class="text-2xl font-black text-center text-[#071022] mb-2">Are you absolutely sure?</h3>
+                        <h3 class="text-2xl font-black text-center text-page-text mb-2">Are you absolutely sure?</h3>
                         <p class="text-center text-slate-500 mb-8">This action cannot be undone. All of your data, including trips and activities, will be permanently removed.</p>
 
                         <form method="POST" action="{{ route('account.delete') }}">
