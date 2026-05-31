@@ -9,7 +9,7 @@
          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
          x-cloak>
         <div @click.away="showActivityDeleteModal = false" class="bg-white rounded-[2rem] w-full max-w-sm p-8 shadow-2xl">
-            <h3 class="text-xl font-black text-[#071022] mb-2">Delete activity?</h3>
+            <h3 class="text-xl font-black text-page-text mb-2">Delete activity?</h3>
             <p class="text-slate-500 text-sm mb-6">This action cannot be undone.</p>
             <div class="flex gap-3">
                 <button @click="showActivityDeleteModal = false" class="flex-1 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors">

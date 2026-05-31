@@ -11,7 +11,7 @@
         <div class="bg-white rounded-[2rem] w-full max-w-md overflow-hidden shadow-2xl animate-float-up" @click.away="showExpenseModal = false">
             <div class="p-8 space-y-6">
                 <div class="flex items-center justify-between">
-                    <h3 class="text-2xl font-black text-[#071022]">Add Expense</h3>
+                    <h3 class="text-2xl font-black text-page-text">Add Expense</h3>
                     <button @click="showExpenseModal = false" class="text-slate-400 hover:text-slate-600 transition-colors">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
@@ -21,18 +21,18 @@
                     @csrf
                     <div class="space-y-2">
                         <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Title</label>
-                        <input type="text" name="title" required placeholder="Dinner at Luigi's" class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all">
+                        <input type="text" name="title" required placeholder="Dinner at Luigi's" class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all">
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
                             <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Amount ($)</label>
-                            <input type="number" step="0.01" name="amount" required placeholder="0.00" class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all">
+                            <input type="number" step="0.01" name="amount" required placeholder="0.00" class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all">
                         </div>
                         <div class="space-y-2">
                             <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Category</label>
                             <div class="relative">
-                                <select name="category" x-model="expenseCategory" class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all appearance-none pr-10">
+                                <select name="category" x-model="expenseCategory" class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all appearance-none pr-10">
                                     <option value="food">Food & Dining</option>
                                     <option value="transport">Transportation</option>
                                     <option value="accommodation">Accommodation</option>
@@ -48,13 +48,13 @@
 
                     <div x-show="expenseCategory === 'other'" x-collapse class="space-y-2">
                         <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Custom Category</label>
-                        <input type="text" name="custom_category" placeholder="e.g. Souvenirs" class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all">
+                        <input type="text" name="custom_category" placeholder="e.g. Souvenirs" class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all">
                     </div>
 
                     <div class="space-y-2">
                         <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Paid By</label>
                         <div class="relative">
-                            <select name="paid_by" required class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-[#FF52A7] outline-none transition-all appearance-none pr-10">
+                            <select name="paid_by" required class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-party-1 outline-none transition-all appearance-none pr-10">
                                 <option value="">Select who paid...</option>
                                 <option value="{{ $trip->user_id }}">{{ $trip->user->name }} (Owner)</option>
                                 @foreach($trip->sharedUsers as $member)
@@ -69,7 +69,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full py-4 bg-[#FFB800] text-[#071022] font-black rounded-2xl shadow-xl hover:bg-yellow-400 transition-all mt-4">
+                    <button type="submit" class="w-full py-4 bg-[#FFB800] text-page-text font-black rounded-2xl shadow-xl hover:bg-yellow-400 transition-all mt-4">
                         SAVE EXPENSE
                     </button>
                 </form>
