@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <h3 class="text-2xl font-bold text-[#071022] text-center mb-2">Delete Transaction?</h3>
+            <h3 class="text-2xl font-bold text-page-text text-center mb-2">Delete Transaction?</h3>
             <p class="text-slate-500 text-center mb-6">This transaction will be marked as deleted but will remain in your history. You can view who deleted it.</p>
 
             <div class="flex gap-3">
