@@ -24,6 +24,43 @@
         </div>
     </div>
 
+    @if(!empty($pendingInvitations) && $pendingInvitations->count())
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-page-text">Trip Invitations</h2>
+                <span class="text-xs font-semibold text-slate-500">{{ $pendingInvitations->count() }} pending</span>
+            </div>
+            <div class="space-y-4">
+                @foreach($pendingInvitations as $invitation)
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50/60 px-4 py-3">
+                        <div>
+                            <p class="text-sm font-semibold text-slate-800">{{ $invitation->trip_title }}</p>
+                            <p class="text-xs text-slate-500">
+                                {{ $invitation->trip_destination }} • {{ \Carbon\Carbon::parse($invitation->trip_start_date)->format('M d, Y') }}
+                                • Invited by {{ $invitation->inviter_name ?? 'Trip owner' }} • Role: {{ ucfirst($invitation->role ?? 'viewer') }}
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors" data-modal="accept" data-trip-id="{{ $invitation->trip_id }}" data-trip-title="{{ $invitation->trip_title }}">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Accept
+                            </button>
+                            <button type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-300 text-slate-600 text-xs font-semibold hover:bg-white transition-colors" data-modal="decline" data-trip-id="{{ $invitation->trip_id }}" data-trip-title="{{ $invitation->trip_title }}">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                Decline
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+    <!-- Invitation Modals -->
+    @include('dashboard.modals.invitation-accept-modal')
+    @include('dashboard.modals.invitation-decline-modal')
+
+
     <!-- Top Metrics -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Upcoming Trips -->
@@ -77,6 +114,8 @@
             <p class="text-xs text-slate-500">Across {{ $tripSummaries->count() }} trip{{ $tripSummaries->count() === 1 ? '' : 's' }}</p>
         </div>
     </div>
+
+
 
     <!-- Two-column Section -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -163,4 +202,60 @@
         </div>
     </div>
 </div>
+
+<script>
+    const acceptModal = document.getElementById('invitation-accept-modal');
+    const declineModal = document.getElementById('invitation-decline-modal');
+    const acceptForm = document.getElementById('accept-modal-form');
+    const declineForm = document.getElementById('decline-modal-form');
+    const acceptText = document.getElementById('accept-modal-text');
+    const declineText = document.getElementById('decline-modal-text');
+
+    const openModal = (modal, form, textEl, tripId, tripTitle) => {
+        if (!modal || !form || !tripId) {
+            return;
+        }
+        const actionBase = form.getAttribute('data-action-base');
+        form.setAttribute('action', actionBase.replace('__TRIP__', tripId));
+        if (textEl && tripTitle) {
+            textEl.textContent = `You are about to update the invitation for "${tripTitle}".`;
+        }
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    };
+
+    const closeModal = (modal) => {
+        if (!modal) {
+            return;
+        }
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    };
+
+    document.querySelectorAll('[data-modal="accept"]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            openModal(acceptModal, acceptForm, acceptText, btn.dataset.tripId, btn.dataset.tripTitle);
+        });
+    });
+
+    document.querySelectorAll('[data-modal="decline"]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            openModal(declineModal, declineForm, declineText, btn.dataset.tripId, btn.dataset.tripTitle);
+        });
+    });
+
+    [acceptModal, declineModal].forEach((modal) => {
+        if (!modal) {
+            return;
+        }
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal(modal);
+            }
+        });
+        modal.querySelectorAll('[data-modal-close], [data-modal-cancel]').forEach((btn) => {
+            btn.addEventListener('click', () => closeModal(modal));
+        });
+    });
+</script>
 @endsection
