@@ -43,7 +43,7 @@
       }" 
       x-init="$watch('sidebarOpen', value => localStorage.setItem('sidebarOpen', value)); document.documentElement.classList.remove('sidebar-open', 'sidebar-closed')">
 
-    <x-data-warning />
+    <!-- <x-data-warning /> -->
 
     <!-- Mobile sidebar backdrop -->
     <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 z-20 bg-slate-900/50 lg:hidden backdrop-blur-sm" @click="sidebarOpen = false"></div>
