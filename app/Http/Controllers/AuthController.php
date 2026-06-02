@@ -126,6 +126,10 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'email' => ['required', 'email', 'exists:users,email'],
+        ], [
+            'email.required' => 'Please enter your email address.',
+            'email.email' => 'Please enter a valid email address.',
+            'email.exists' => 'No account found for this email address.',
         ]);
 
         $user = User::where('email', $validated['email'])->firstOrFail();
