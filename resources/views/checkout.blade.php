@@ -113,7 +113,7 @@
 
                         <div class="pt-4">
                             <p id="terms-text" class="text-xs text-slate-500 mb-4 leading-relaxed">
-                                By proceeding, you agree to our Terms of Service. Your card will be charged $9.00 immediately for the first month.
+                                By proceeding, you agree to our <a href="{{ route('terms') }}" class="text-party-1 font-semibold hover:underline">Terms of Service</a>. Your card will be charged $9.00 immediately for the first month.
                             </p>
                             <button type="submit" id="checkout-btn" class="w-full btn-primary py-3.5 rounded-xl text-page-text font-bold text-sm shadow-lg shadow-party-1/20 hover:-translate-y-0.5 transition-transform">
                                 Pay $9.00 Now
@@ -133,6 +133,7 @@
     const checkoutBtn = document.getElementById('checkout-btn');
     const totalText = document.querySelector('.text-xl.font-bold');
     const termsText = document.getElementById('terms-text');
+    const termsUrl = "{{ route('terms') }}";
     const allInputs = document.querySelectorAll('.checkout-input');
 
     // Card number auto-formatting (add spaces every 4 digits)
@@ -161,7 +162,7 @@
         document.querySelectorAll('[id^="err-"]').forEach(e => e.classList.add('hidden'));
         checkoutBtn.innerText = 'Start 14-Day Free Trial';
         totalText.innerText = '$0.00*';
-        termsText.innerText = 'By starting your trial, you agree to our Terms of Service. You will not be charged until your 14-day trial ends. Cancel anytime before then.';
+        termsText.innerHTML = `By starting your trial, you agree to our <a href="${termsUrl}" class="text-party-1 font-semibold hover:underline">Terms of Service</a>. You will not be charged until your 14-day trial ends. Cancel anytime before then.`;
     }
 
     function setDirectMode() {
@@ -170,7 +171,7 @@
         allInputs.forEach(i => i.disabled = false);
         checkoutBtn.innerText = 'Pay $9.00 Now';
         totalText.innerText = '$9.00';
-        termsText.innerText = 'By proceeding, you agree to our Terms of Service. Your card will be charged $9.00 immediately for the first month.';
+        termsText.innerHTML = `By proceeding, you agree to our <a href="${termsUrl}" class="text-party-1 font-semibold hover:underline">Terms of Service</a>. Your card will be charged $9.00 immediately for the first month.`;
     }
 
     // Toggle handler
