@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: travel-itinerary-manager
-    env: docker
-    dockerfilePath: Dockerfile
-    plan: free
-    releaseCommand: php artisan migrate --force
