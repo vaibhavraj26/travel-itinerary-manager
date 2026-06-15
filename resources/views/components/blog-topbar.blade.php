@@ -1,7 +1,7 @@
 <header class="sticky top-0 z-40 border-b border-party-1/10 bg-white/80 backdrop-blur-xl">
             <div class="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between gap-4">
                 <a href="{{ route('landing') }}" class="flex items-center gap-3">
-                    <x-logo />
+                    <x-application-logo />
                     <div class="leading-tight">
                         <div class="font-bold text-lg tracking-tight">triptogether</div>
                         <div class="text-xs text-slate-500 uppercase tracking-[0.25em]">Blog</div>

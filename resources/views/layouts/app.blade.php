@@ -12,8 +12,10 @@
     
 </head>
 <body>
-    <x-data-warning />
-
+    @if(!request()->routeIs('login') && !request()->routeIs('register'))
+        <x-data-warning />
+    @endif
+ 
     @yield('content')
     
     @if(!request()->routeIs('login') && !request()->routeIs('register'))

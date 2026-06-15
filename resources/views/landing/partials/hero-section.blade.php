@@ -3,9 +3,8 @@
     {{-- Top-left logo inside hero (mobile: icon only) --}}
     <a href="{{ route('landing') }}" class="absolute top-6 left-6 z-30 flex items-center gap-2">
       
-        <x-logo />
-
-        <span class="font-bold text-lg text-page-text tracking-tight hidden sm:inline">triptogether</span>
+        <x-application-logo />
+        <x-application-name />
     </a>
 
     {{-- Top-right Sign In button --}}

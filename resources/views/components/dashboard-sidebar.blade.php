@@ -19,7 +19,7 @@
         <a href="{{ route('home') }}" class="flex items-center gap-4 shrink-0">
             {{-- Brand icon --}}
             <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-party-1/5">
-                <x-logo />
+                <x-application-logo />
             </div>
             {{-- Brand text - hidden when collapsed --}}
             <span x-show="sidebarOpen" x-transition.opacity.duration.300ms class="font-['Playfair_Display',serif] font-black text-xl text-page-text whitespace-nowrap">

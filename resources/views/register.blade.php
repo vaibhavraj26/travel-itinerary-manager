@@ -20,10 +20,7 @@
                 <!-- Content --> 
                 <div class="absolute inset-0 flex flex-col justify-between p-8 lg:p-10">
                     <a href="{{ route('landing') }}" class="flex items-center gap-2 group w-max">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8 text-party-1 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" stroke-width="1.5">
-                          <path d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.866-3.134-7-7-7z" fill="party-1" stroke="none"/>
-                          <circle cx="12" cy="9" r="2.5" fill="#FFF" />
-                        </svg>
+                       <x-application-logo />
                         <span class="font-bold text-xl tracking-tight text-white">triptogether</span>
                     </a>
 

@@ -25,7 +25,7 @@
             <div class="lg:col-span-2">
                 <a href="{{ route('landing') }}" class="flex items-center gap-2 mb-6">
                     
-                    <x-logo />
+                    <x-application-logo />
 
                     <span class="font-bold text-2xl tracking-tight text-white">triptogether</span>
                 </a>

@@ -1,0 +1,1 @@
+<span class="font-bold text-lg text-page-text tracking-tight hidden sm:inline">triptogether</span>
