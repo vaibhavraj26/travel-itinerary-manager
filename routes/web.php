@@ -234,6 +234,61 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [AuthController::class, 'processCheckout'])->name('checkout.submit');
 });
 
+Route::get('/test-perf', function () {
+    $report = [];
+    
+    $start = defined('LARAVEL_START') ? LARAVEL_START : microtime(true);
+    $report['bootstrap_to_route_start_ms'] = round((microtime(true) - $start) * 1000, 2);
+    
+    $dbHost = config('database.connections.pgsql.host');
+    $dnsStart = microtime(true);
+    $ip = gethostbyname($dbHost);
+    $report['dns_lookup_ms'] = round((microtime(true) - $dnsStart) * 1000, 2);
+    $report['db_host'] = $dbHost;
+    $report['db_resolved_ip'] = $ip;
+
+    $dbConnStart = microtime(true);
+    try {
+        $pdo = DB::connection()->getPdo();
+        $report['db_connection_ms'] = round((microtime(true) - $dbConnStart) * 1000, 2);
+        
+        $queryStart = microtime(true);
+        DB::select('SELECT 1');
+        $report['db_simple_query_ms'] = round((microtime(true) - $queryStart) * 1000, 2);
+    } catch (\Exception $e) {
+        $report['db_error'] = $e->getMessage();
+    }
+    
+    $sessionStart = microtime(true);
+    try {
+        session()->put('perf_test_key', 'hello');
+        session()->save();
+        $report['session_write_ms'] = round((microtime(true) - $sessionStart) * 1000, 2);
+        
+        $sessionReadStart = microtime(true);
+        session()->get('perf_test_key');
+        $report['session_read_ms'] = round((microtime(true) - $sessionReadStart) * 1000, 2);
+    } catch (\Exception $e) {
+        $report['session_error'] = $e->getMessage();
+    }
+
+    $cacheStart = microtime(true);
+    try {
+        cache()->put('perf_test_key', 'hello', 10);
+        $report['cache_write_ms'] = round((microtime(true) - $cacheStart) * 1000, 2);
+        
+        $cacheReadStart = microtime(true);
+        cache()->get('perf_test_key');
+        $report['cache_read_ms'] = round((microtime(true) - $cacheReadStart) * 1000, 2);
+    } catch (\Exception $e) {
+        $report['cache_error'] = $e->getMessage();
+    }
+
+    $report['total_route_time_ms'] = round((microtime(true) - $start) * 1000, 2);
+
+    return response()->json($report);
+});
+
 if (config('app.debug')) {
     Route::get('/test-error/{code}', function ($code) {
         if (view()->exists("errors.{$code}")) {
@@ -242,4 +297,5 @@ if (config('app.debug')) {
         abort(404);
     });
 }
+
 
