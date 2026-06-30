@@ -45,11 +45,9 @@
 
 ## 🛠️ Tech Stack
 
-- **Backend**: [Laravel 11](https://laravel.com/) (PHP)
-- **Frontend**: [Alpine.js](https://alpinejs.dev/) & [Tailwind CSS](https://tailwindcss.com/)
-- **Build System**: [Vite](https://vitejs.dev/)
-- **Database**: [PostgreSQL](https://www.postgresql.org/) (via Supabase)
-- **Email Services**: [Brevo API](https://www.brevo.com/)
+- **Front-end Tech**: [Alpine.js](https://alpinejs.dev/) / [Tailwind CSS](https://tailwindcss.com/) / Laravel Blade Templates
+- **Back-end Tech**: [PHP](https://www.php.net/) / [Laravel 11 Framework](https://laravel.com/)
+- **Database/Tools**: [PostgreSQL](https://www.postgresql.org/) (Supabase) / [Brevo SMTP API](https://www.brevo.com/) / Gemini AI API / [Vite Build System](https://vitejs.dev/)
 
 ---
 
