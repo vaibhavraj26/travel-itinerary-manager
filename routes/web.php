@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Trip;
 use App\Models\Expense;
 use App\Models\ItineraryActivity;
 use Carbon\Carbon;
@@ -57,7 +58,17 @@ Route::middleware('auth')->group(function () {
         $user = Auth::user();
         $today = Carbon::today();
 
-        $trips = $user->trips()->latest()->get();
+        $userId = $user->id;
+        $trips = Trip::query()
+            ->where(function ($q) use ($userId) {
+                $q->where('user_id', $userId)
+                  ->orWhereHas('sharedUsers', function ($sq) use ($userId) {
+                      $sq->where('user_id', $userId)
+                         ->where('trip_user.is_accepted', true);
+                  });
+            })
+            ->latest()
+            ->get();
 
         $classifyTrip = function ($trip) use ($today) {
             if ($trip->status === 'cancelled') {
@@ -146,21 +157,25 @@ Route::middleware('auth')->group(function () {
             ->take(4)
             ->values();
 
-        $pendingInvitations = DB::table('trip_user')
-            ->join('trips', 'trip_user.trip_id', '=', 'trips.id')
-            ->leftJoin('users as inviters', 'trip_user.invited_by', '=', 'inviters.id')
-            ->where('trip_user.user_id', $user->id)
-            ->where('trip_user.is_accepted', false)
-            ->select([
-                'trips.id as trip_id',
-                'trips.title as trip_title',
-                'trips.destination as trip_destination',
-                'trips.start_date as trip_start_date',
-                'trip_user.role as role',
-                'inviters.name as inviter_name',
-            ])
-            ->orderByDesc('trips.created_at')
-            ->get();
+        $pendingInvitations = $user->sharedTrips()
+            ->wherePivot('is_accepted', false)
+            ->with(['activities', 'user'])
+            ->latest()
+            ->get()
+            ->map(function ($trip) {
+                return (object)[
+                    'trip_id' => $trip->id,
+                    'trip_title' => $trip->title,
+                    'trip_destination' => $trip->destination,
+                    'trip_start_date' => $trip->start_date,
+                    'trip_end_date' => $trip->end_date,
+                    'trip_description' => $trip->description,
+                    'trip_budget' => (float) ($trip->budget ?? 0),
+                    'role' => $trip->pivot->role,
+                    'inviter_name' => \App\Models\User::find($trip->pivot->invited_by)?->name ?? $trip->user?->name ?? 'Trip owner',
+                    'activities' => $trip->activities,
+                ];
+            });
 
         return compact(
             'tripSummaries',
@@ -223,6 +238,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/destinations', function () use ($dashboardData) {
         return view('dashboard.index', $dashboardData());
     })->name('destinations.index');
+
+    Route::get('/discover', function () {
+        return view('discover');
+    })->name('discover');
 
     Route::get('/checkout', function () {
         if (Auth::user()->plan === 'plus') {

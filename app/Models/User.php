@@ -67,6 +67,6 @@ class User extends Authenticatable
      */
     public function sharedTrips()
     {
-        return $this->belongsToMany(Trip::class)->withPivot('role')->withTimestamps();
+        return $this->belongsToMany(Trip::class)->withPivot('role', 'is_accepted', 'invited_by')->withTimestamps();
     }
 }

@@ -118,19 +118,18 @@ class EmailService
             $trip->sharedUsers()->syncWithoutDetaching([
                 $user->id => [
                     'role' => $invitation->role,
-                    'is_accepted' => true,
+                    'is_accepted' => false,
                     'invited_by' => $invitation->invited_by,
                 ],
             ]);
 
             $trip->sharedUsers()->updateExistingPivot($user->id, [
                 'role' => $invitation->role,
-                'is_accepted' => true,
+                'is_accepted' => false,
                 'invited_by' => $invitation->invited_by,
             ]);
 
             $invitation->delete();
-            $this->notifyTripMembersJoined($trip, $user);
         }
     }
 
@@ -148,11 +147,13 @@ class EmailService
         $senderName = config('services.brevo.sender_name', config('app.name'));
 
         if (!is_string($apiKey) || $apiKey === '') {
-            throw new \RuntimeException('BREVO_API_KEY is not configured.');
+            \Log::warning('BREVO_API_KEY is not configured. Skipping email notification.');
+            return;
         }
 
         if (!is_string($senderEmail) || $senderEmail === '') {
-            throw new \RuntimeException('BREVO_SENDER_EMAIL is not configured.');
+            \Log::warning('BREVO_SENDER_EMAIL is not configured. Skipping email notification.');
+            return;
         }
 
         $html = view('emails.notification', [
@@ -174,24 +175,30 @@ class EmailService
             $text .= "\n\n" . $actionLabel . ': ' . $actionUrl;
         }
 
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'api-key' => $apiKey,
-        ])->post('https://api.brevo.com/v3/smtp/email', [
-            'sender' => [
-                'email' => $senderEmail,
-                'name' => $senderName,
-            ],
-            'to' => [
-                ['email' => $email],
-            ],
-            'subject' => $subject,
-            'htmlContent' => $html,
-            'textContent' => $text,
-        ]);
+        $cleanEmail = trim(strtolower($email));
 
-        if ($response->failed()) {
-            throw new \RuntimeException('Brevo API error: ' . $response->status() . ' ' . $response->body());
+        try {
+            $response = Http::withHeaders([
+                'accept' => 'application/json',
+                'api-key' => $apiKey,
+            ])->post('https://api.brevo.com/v3/smtp/email', [
+                'sender' => [
+                    'email' => $senderEmail,
+                    'name' => $senderName,
+                ],
+                'to' => [
+                    ['email' => $cleanEmail],
+                ],
+                'subject' => $subject,
+                'htmlContent' => $html,
+                'textContent' => $text,
+            ]);
+
+            if ($response->failed()) {
+                \Log::error('Brevo API error: ' . $response->status() . ' ' . $response->body());
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to send email via Brevo: ' . $e->getMessage());
         }
     }
 }

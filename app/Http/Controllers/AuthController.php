@@ -33,7 +33,7 @@ class AuthController extends Controller
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => trim(strtolower($request->email)),
             'password' => Hash::make($request->password),
             'plan' => 'free',
         ]);
@@ -64,6 +64,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, true)) {
             $request->session()->regenerate();
             $this->emailService->sendWelcome(Auth::user());
+            $this->emailService->claimGuestInvitations(Auth::user());
 
             return redirect()->intended(route('home'));
         }

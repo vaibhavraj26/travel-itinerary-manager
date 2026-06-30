@@ -20,10 +20,27 @@ class TripController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Auth::user()->trips()->with(['user', 'sharedUsers', 'invitations']);
+        $userId = Auth::id();
+        $query = Trip::query()
+            ->where(function ($q) use ($userId) {
+                $q->where('user_id', $userId)
+                  ->orWhereHas('sharedUsers', function ($sq) use ($userId) {
+                      $sq->where('user_id', $userId)
+                         ->where('trip_user.is_accepted', true);
+                  });
+            })
+            ->with(['user', 'sharedUsers', 'invitations']);
 
         // Track whether the user has any trips at all (before filters)
-        $hasAnyTrips = Auth::user()->trips()->count() > 0;
+        $hasAnyTrips = Trip::query()
+            ->where(function ($q) use ($userId) {
+                $q->where('user_id', $userId)
+                  ->orWhereHas('sharedUsers', function ($sq) use ($userId) {
+                      $sq->where('user_id', $userId)
+                         ->where('trip_user.is_accepted', true);
+                  });
+            })
+            ->count() > 0;
 
         if ($request->filled('search')) {
             $q = $request->input('search');
@@ -272,8 +289,8 @@ class TripController extends Controller
             ];
         })->values();
 
-        $creditors = $settlementBalances->filter(fn ($member) => $member['balance'] > 0)->sortByDesc('balance')->values();
-        $debtors = $settlementBalances->filter(fn ($member) => $member['balance'] < 0)->sortBy('balance')->values();
+        $creditors = $settlementBalances->filter(fn ($member) => $member['balance'] > 0)->sortByDesc('balance')->values()->all();
+        $debtors = $settlementBalances->filter(fn ($member) => $member['balance'] < 0)->sortBy('balance')->values()->all();
 
         $settlementTransfers = collect();
         $creditorIndex = 0;
@@ -546,22 +563,22 @@ class TripController extends Controller
      */
     public function addMember(Request $request, Trip $trip)
     {
-        $this->authorizeTrip($trip, 'owner');
+        $this->authorizeTrip($trip, 'editor');
 
         $request->validate([
             'email' => 'required|email',
             'role' => 'required|in:editor,viewer',
         ]);
 
-        $email = $request->email;
+        $email = trim(strtolower($request->email));
 
         // 1. Prevent inviting oneself (the owner)
-        if (strtolower($email) === strtolower($trip->user->email)) {
+        if ($email === strtolower($trip->user->email)) {
             return back()->with('error', 'You cannot invite yourself since you are the owner of this trip.');
         }
 
         // 2. Check if this is an existing registered user
-        $user = \App\Models\User::where('email', $email)->first();
+        $user = \App\Models\User::whereRaw('LOWER(email) = ?', [$email])->first();
 
         if ($user) {
             // Check if already in sharedUsers
