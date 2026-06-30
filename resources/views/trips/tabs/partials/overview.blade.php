@@ -5,7 +5,7 @@
                     <h3 class="text-sm font-black text-amber-700 uppercase tracking-widest">Quick Notes</h3>
                     <p class="mt-2 text-slate-700 text-sm max-w-3xl">{{ $trip->quick_notes ?? 'No quick notes yet. Use this space to pin short reminders or shared notes for the group.' }}</p>
                 </div>
-                @if(Auth::id() === $trip->user_id || Auth::user()->trips()->where('trip_user.user_id', Auth::id())->where('trip_user.role', 'editor')->exists())
+                @if(Auth::id() === $trip->user_id || $trip->sharedUsers()->where('user_id', Auth::id())->wherePivot('role', 'editor')->exists())
                     <div class="flex-shrink-0">
                         <button type="button" @click="showQuickNotesEdit = true" class="px-4 py-2 bg-white border rounded-lg text-sm font-bold hover:bg-slate-50">Edit</button>
                     </div>
@@ -81,7 +81,7 @@
                                                 @endif
                                             </p>
                                         </div>
-                                        @if(Auth::user()->id === $trip->user_id || Auth::user()->trips()->where('trip_user.user_id', Auth::id())->where('trip_user.role', 'editor')->exists())
+                                        @if(Auth::user()->id === $trip->user_id || $trip->sharedUsers()->where('user_id', Auth::id())->wherePivot('role', 'editor')->exists())
                                             <div>
                                                 @if(empty($nextActivity->is_completed))
                                                     <button type="button" @click="completingActivity = {{ $nextActivity->id }}; showCompleteModal = true" class="px-3 py-2 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-bold cursor-pointer">Mark Completed</button>

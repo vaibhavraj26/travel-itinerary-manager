@@ -7,7 +7,7 @@
                             <h2 class="text-xl font-bold text-page-text">Budget & Expenses</h2>
                             <p class="text-slate-500 text-sm mt-1">Track your spending for this trip.</p>
                         </div>
-                        @if($trip->user_id === Auth::id())
+                        @if($trip->user_id === Auth::id() || $trip->sharedUsers()->where('user_id', Auth::id())->wherePivot('role', 'editor')->exists())
                             <div class="flex items-center gap-3">
                                 @if(!$trip->budget)
                                     <button @click="showBudgetModal = true" class="btn-primary py-2.5 px-5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-party-1/20 hover:-translate-y-0.5 transition-transform">
@@ -97,7 +97,7 @@
                                         </div>
                                         <div class="flex items-center gap-3">
                                             <p class="text-base font-black {{ $isDeleted ? 'text-slate-400' : 'text-red-500' }} whitespace-nowrap">- ₹{{ number_format($transaction->amount, 2) }}</p>
-                                            @if(!$isDeleted && (Auth::user()->id === $trip->user_id || Auth::user()->trips()->where('trip_user.user_id', Auth::id())->where('trip_user.role', 'editor')->exists()))
+                                            @if(!$isDeleted && (Auth::user()->id === $trip->user_id || $trip->sharedUsers()->where('user_id', Auth::id())->wherePivot('role', 'editor')->exists()))
                                                 <button @click="editingExpense = {{ $transaction->id }}; editForm.title = '{{ addslashes($transaction->title) }}'; editForm.amount = parseFloat('{{ $transaction->amount }}'); editForm.category = '{{ addslashes($transaction->category) }}'; editForm.paid_by = {{ $transaction->paid_by ?? 'null' }}; editForm.type = '{{ $transaction->type }}'; showEditModal = true" class="p-2 hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
                                                     <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                                 </button>
@@ -142,7 +142,7 @@
                                         </div>
                                         <div class="flex items-center gap-3">
                                             <p class="text-base font-black {{ $isDeleted ? 'text-slate-400' : 'text-emerald-500' }} whitespace-nowrap">+ ₹{{ number_format($transaction->amount, 2) }}</p>
-                                            @if(!$isDeleted && (Auth::user()->id === $trip->user_id || Auth::user()->trips()->where('trip_user.user_id', Auth::id())->where('trip_user.role', 'editor')->exists()))
+                                            @if(!$isDeleted && (Auth::user()->id === $trip->user_id || $trip->sharedUsers()->where('user_id', Auth::id())->wherePivot('role', 'editor')->exists()))
                                                 <button @click="editingExpense = {{ $transaction->id }}; editForm.title = '{{ addslashes($transaction->title) }}'; editForm.amount = parseFloat('{{ $transaction->amount }}'); editForm.category = '{{ addslashes($transaction->category) }}'; editForm.paid_by = {{ $transaction->paid_by ?? 'null' }}; editForm.type = '{{ $transaction->type }}'; showEditModal = true" class="p-2 hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
                                                     <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                                 </button>

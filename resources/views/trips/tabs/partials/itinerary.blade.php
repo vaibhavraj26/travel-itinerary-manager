@@ -2,8 +2,8 @@
         <div x-show="activeTab === 'itinerary'" x-cloak class="space-y-8">
             <div class="flex items-center justify-between">
                 <h2 class="text-2xl font-bold text-page-text">Daily Schedule</h2>
-                @if($trip->user_id === Auth::id())
-                    <button @click="showActivityModal = true" class="btn-primary py-2.5 px-5 rounded-xl text-xs font-bold flex items-center gap-2">
+                @if($trip->user_id === Auth::id() || $trip->sharedUsers()->where('user_id', Auth::id())->wherePivot('role', 'editor')->exists())
+                    <button @click="showActivityModal = true" class="btn-primary py-2.5 px-5 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
                         Add Activity
                     </button>
@@ -16,7 +16,9 @@
                         <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </div>
                     <p class="text-slate-500 font-medium">Your itinerary is empty. Start adding activities to map out your journey!</p>
-                    <button @click="showActivityModal = true" class="btn-primary py-3 px-8 rounded-xl text-sm font-bold">Add First Activity</button>
+                    @if($trip->user_id === Auth::id() || $trip->sharedUsers()->where('user_id', Auth::id())->wherePivot('role', 'editor')->exists())
+                        <button @click="showActivityModal = true" class="btn-primary py-3 px-8 rounded-xl text-sm font-bold cursor-pointer">Add First Activity</button>
+                    @endif
                 </div>
             @else
                 <div class="space-y-6 relative">
@@ -77,7 +79,7 @@
                                                     <p class="text-slate-600 text-sm leading-relaxed mt-2">{{ $activity->notes }}</p>
                                                 @endif
                                             </div>
-                                            @if(Auth::user()->id === $trip->user_id || Auth::user()->trips()->where('trip_user.user_id', Auth::id())->where('trip_user.role', 'editor')->exists())
+                                            @if(Auth::user()->id === $trip->user_id || $trip->sharedUsers()->where('user_id', Auth::id())->wherePivot('role', 'editor')->exists())
                                                 <div class="flex items-start gap-2">
                                                     <button type="button" @click="editingActivity = {{ $activity->id }}; activityForm.title = '{{ addslashes($activity->title) }}'; activityForm.date = '{{ $activity->date }}'; activityForm.start_time = '{{ $activity->start_time }}'; activityForm.end_time = '{{ $activity->end_time }}'; activityForm.location = '{{ addslashes($activity->location ?? '') }}'; activityForm.notes = '{{ addslashes($activity->notes ?? '') }}'; activityForm.type = '{{ addslashes($activity->type) }}'; activityForm.custom_type = ''; activityForm.is_completed = {{ $activity->is_completed ? 'true' : 'false' }}; activityType = ['activity','transport','accommodation','dining','other'].includes(activityForm.type) ? activityForm.type : 'other'; if (activityType === 'other') { activityForm.custom_type = activityForm.type; } showActivityEditModal = true" class="p-2 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer" title="Edit">
                                                         <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>

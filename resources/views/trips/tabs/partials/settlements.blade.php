@@ -68,7 +68,7 @@
                                         ₹{{ number_format($transfer['amount'], 2) }}
                                     </div>
                                     <div class="text-right">
-                                        <p class="font-bold text-page-text">{{ $transfer['to']->name }}</p>
+                                        <p class="font-bold text-page-text">to  {{ $transfer['to']->name }}</p>
                                         <p class="text-xs text-slate-500 mt-1">to settle the trip</p>
                                     </div>
                                 </div>

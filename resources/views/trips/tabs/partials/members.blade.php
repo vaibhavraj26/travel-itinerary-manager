@@ -6,7 +6,7 @@
                         <h2 class="text-xl font-bold text-page-text">Travel Buddies</h2>
                         <p class="text-slate-500 text-sm mt-1">Manage who can see and edit this itinerary.</p>
                     </div>
-                    @if($trip->user_id === Auth::id())
+                    @if($trip->user_id === Auth::id() || $trip->sharedUsers()->where('user_id', Auth::id())->wherePivot('role', 'editor')->exists())
                         <button @click="showInviteModal = true" class="btn-primary py-2.5 px-5 rounded-xl text-xs font-bold flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
                             Invite Friends
