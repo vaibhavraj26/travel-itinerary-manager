@@ -3,7 +3,7 @@
 @section('header_title', 'Home')
 
 @section('content')
-<div class="max-w-7xl mx-auto space-y-6 animate-float-up">
+<div class="max-w-7xl mx-auto space-y-6 animate-float-up" x-data="{ selectedTrip: null }">
     @php
         $formatCurrency = fn ($amount) => '₹' . number_format((float) $amount, 2);
         $nextTripDate = $nextTrip ? \Carbon\Carbon::parse($nextTrip->start_date) : null;
@@ -11,15 +11,25 @@
     @endphp
 
     <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-            <h1 class="text-3xl font-bold text-page-text font-['Playfair_Display',serif]">Welcome back, {{ Auth::user()->name ?? 'Traveler' }}!</h1>
-            <p class="text-slate-500 mt-1">Here is what's happening with your trips today.</p>
+    <div class="bg-white rounded-[2rem] border border-slate-200/80 p-8 md:p-10 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+        <div class="space-y-3">
+            <div class="flex items-center gap-3 flex-wrap">
+                <span class="bg-party-1 text-white text-[10px] font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full">Planning Mode</span>
+                <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">Today, {{ strtoupper(now()->format('F d')) }}</span>
+            </div>
+            <div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-page-text tracking-tight">
+                    Where to next, {{ strtolower(Auth::user()->name ?? 'traveler') }}?
+                </h1>
+                <p class="text-slate-500 mt-2 text-sm sm:text-base leading-relaxed">
+                    Your adventure starts with a single step. Here is what's happening with your trips today.
+                </p>
+            </div>
         </div>
-        <div>
-            <a href="{{ route('trips.create') }}" class="btn-primary py-2.5 px-5 rounded-xl text-page-text font-bold text-sm shadow-md shadow-party-1/20 hover:-translate-y-0.5 transition-transform inline-flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                New Trip
+        <div class="shrink-0 text-left">
+            <a href="{{ route('trips.create') }}" 
+               class="py-3.5 px-6 rounded-2xl bg-party-1 hover:bg-[#E03A89] text-white font-extrabold text-sm shadow-xl hover:shadow-party-1/40 hover:-translate-y-0.5 transition-all inline-flex items-center gap-1.5 cursor-pointer duration-300">
+                <span class="text-lg leading-none font-extrabold">+</span> New Trip
             </a>
         </div>
     </div>
@@ -40,13 +50,22 @@
                                 • Invited by {{ $invitation->inviter_name ?? 'Trip owner' }} • Role: {{ ucfirst($invitation->role ?? 'viewer') }}
                             </p>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors" data-modal="accept" data-trip-id="{{ $invitation->trip_id }}" data-trip-title="{{ $invitation->trip_title }}">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                            <button type="button" 
+                                    @click="selectedTrip = {{ json_encode($invitation) }}" 
+                                    class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-xs">
+                                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                View Details
+                            </button>
+                            <button type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors cursor-pointer" data-modal="accept" data-trip-id="{{ $invitation->trip_id }}" data-trip-title="{{ $invitation->trip_title }}">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                 Accept
                             </button>
-                            <button type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-300 text-slate-600 text-xs font-semibold hover:bg-white transition-colors" data-modal="decline" data-trip-id="{{ $invitation->trip_id }}" data-trip-title="{{ $invitation->trip_title }}">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            <button type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-300 text-slate-600 text-xs font-bold uppercase tracking-wider hover:bg-white transition-colors cursor-pointer" data-modal="decline" data-trip-id="{{ $invitation->trip_id }}" data-trip-title="{{ $invitation->trip_title }}">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                                 Decline
                             </button>
                         </div>
@@ -59,6 +78,7 @@
     <!-- Invitation Modals -->
     @include('dashboard.modals.invitation-accept-modal')
     @include('dashboard.modals.invitation-decline-modal')
+    @include('dashboard.modals.trip-details-modal')
 
 
     <!-- Top Metrics -->
@@ -187,17 +207,27 @@
                 </div>
             </div>
 
-            <!-- Danger Zone -->
-            <div class="bg-red-50 border border-red-100 rounded-2xl p-6">
-                <h3 class="text-red-800 font-bold text-sm mb-2">Danger Zone</h3>
-                <p class="text-xs text-red-600 mb-4">Permanently delete your account and all associated data. This action cannot be undone.</p>
-                <form method="POST" action="{{ route('account.delete') }}" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="w-full py-2.5 rounded-xl bg-white border border-red-200 text-red-600 font-medium text-xs hover:bg-red-100 transition-colors">
-                        Delete Account
-                    </button>
-                </form>
+            <!-- Recommendation Block -->
+            <div class="relative overflow-hidden rounded-[2rem] aspect-square flex flex-col justify-end p-6 text-white shadow-xl border border-slate-100 group">
+                {{-- Background Image --}}
+                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" 
+                     style="background-image: url('https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?q=80&w=600&auto=format&fit=crop')">
+                </div>
+                {{-- Gradient Overlay --}}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent"></div>
+                
+                {{-- Card Content --}}
+                <div class="relative z-10 space-y-4">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-300">Recommended For You</p>
+                        <h3 class="text-3xl font-black tracking-tight mt-1">Santorini, Greece</h3>
+                    </div>
+                    
+                    <a href="{{ route('trips.create', ['destination' => 'Santorini, Greece']) }}" 
+                       class="block w-full py-3.5 rounded-2xl border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-extrabold text-xs tracking-wider uppercase text-center transition-all duration-300 shadow-lg cursor-pointer">
+                        Explore Guide
+                    </a>
+                </div>
             </div>
         </div>
     </div>

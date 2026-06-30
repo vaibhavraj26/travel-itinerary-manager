@@ -14,27 +14,31 @@
     </div>
 
     <!-- Right side navbar icons & profile -->
-    <div class="flex items-center gap-4">
-        <button class="text-slate-400 hover:text-slate-600 transition-colors relative">
-            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-            <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-party-1 border-2 border-white rounded-full"></span>
+    <div class="flex items-center gap-3">
+        <button class="text-slate-400 hover:text-slate-600 transition-colors p-1.5 flex items-center justify-center focus:outline-none">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
         </button>
+
+        {{-- Divider --}}
+        <div class="h-8 border-l border-slate-200 mx-2"></div>
 
         <!-- Profile Dropdown -->
         <div class="relative" x-data="{ userMenuOpen: false }" @click.outside="userMenuOpen = false">
-            <button @click="userMenuOpen = !userMenuOpen" class="flex items-center gap-2 focus:outline-none">
+            <button @click="userMenuOpen = !userMenuOpen" class="flex items-center gap-3.5 focus:outline-none text-right cursor-pointer">
+                {{-- Text column on left of avatar --}}
+                <div class="hidden md:block text-right">
+                    <p class="text-sm font-extrabold text-page-text leading-tight">{{ strtolower(Auth::user()->name ?? 'traveler') }}</p>
+                    <p class="text-[10px] font-black text-party-1 uppercase tracking-wider leading-tight mt-0.5">{{ Auth::user()->plan === 'plus' ? 'PLUS MEMBER' : 'FREE MEMBER' }}</p>
+                </div>
+                
+                {{-- Avatar --}}
                 @if(Auth::user()->avatar)
-                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}" class="w-9 h-9 rounded-full object-cover shadow-md border-2 border-white" alt="{{ Auth::user()->name }}">
+                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}" class="w-10 h-10 rounded-full object-cover shadow-sm border-2 border-party-1 hover:scale-105 transition-transform" alt="{{ Auth::user()->name }}">
                 @else
-                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-party-1 to-accent flex items-center justify-center text-white font-bold shadow-md border-2 border-white">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-party-1 to-accent flex items-center justify-center text-white font-bold border-2 border-party-1 shadow-sm hover:scale-105 transition-transform">
                         {{ substr(Auth::user()->name, 0, 1) }}
                     </div>
                 @endif
-                <div class="hidden md:block text-left">
-                    <p class="text-sm font-semibold text-slate-700 leading-tight">{{ Auth::user()->name }}</p>
-                    <p class="text-xs text-slate-500 leading-tight">{{ Auth::user()->plan === 'plus' ? 'Plus Member' : 'Free Member' }}</p>
-                </div>
-                <svg class="hidden md:block w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
 
             <!-- Dropdown menu -->
