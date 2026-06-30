@@ -1,5 +1,7 @@
 # ✈️ tripTogether — Premium Travel Planner
 
+Experience the platform live here: **[Live Link]**(https://travel-itinerary-manager.onrender.com)
+
 > Collaborate, plan, and budget your travel itineraries in one beautiful, cohesive dashboard.
 
 `tripTogether` is a state-of-the-art collaborative travel planner designed to streamline your vacation planning process. From day-by-day itinerary generation to auto-calculated budget splits and settlements, it empowers friends to coordinate travel details seamlessly.
